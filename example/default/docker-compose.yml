@@ -1,0 +1,59 @@
+services:
+  nginx:
+    build:
+      dockerfile: ./docker/nginx.dockerfile
+      context: .
+    image: brucfo/alura-nginx
+    container_name: alura-nginx
+    ports:
+      - "80:80"
+    networks:
+      - alura-rede-test
+    depends_on:
+      - "node1"
+      - "node2"
+      - "node3"
+  mongodb:
+    image: mongo
+    container_name: alura-mongo
+    networks:
+      - alura-rede-test
+  node1:
+    build:
+      dockerfile: ./docker/alura-books.dockerfile
+      context: .
+    image: brucfo/alura-books
+    container_name: alura-books-1
+    ports:
+      - 3000
+    networks:
+      - alura-rede-test
+    depends_on:
+      - "mongodb"
+  node2:
+    build:
+      dockerfile: ./docker/alura-books.dockerfile
+      context: .
+    image: brucfo/alura-books
+    container_name: alura-books-2
+    ports:
+      - 3000
+    networks:
+      - alura-rede-test
+    depends_on:
+      - "mongodb"
+  node3:
+    build:
+      dockerfile: ./docker/alura-books.dockerfile
+      context: .
+    image: brucfo/alura-books
+    container_name: alura-books-3
+    ports:
+      - 3000
+    networks:
+      - alura-rede-test
+    depends_on:
+      - "mongodb"
+networks:
+  alura-rede-test:
+    driver: bridge
